@@ -1,0 +1,11 @@
+title,year,rating,runtime_minutes,budget_millions,box_office_millions,genre
+"The Shawshank Redemption",1994,9.3,142,25,58.8,"Drama"
+"The Dark Knight",2008,9.0,152,185,1004.6,"Action"
+"Inception",2010,8.8,148,160,836.8,"Sci-Fi"
+"Pulp Fiction",1994,8.9,154,8,213.9,"Crime"
+"The Matrix",1999,8.7,136,63,463.5,"Sci-Fi"
+"Forrest Gump",1994,8.8,142,55,678.2,"Drama"
+"Interstellar",2014,8.6,169,165,701.7,"Sci-Fi"
+"The Godfather",1972,9.2,175,6,245.1,"Crime"
+"Avatar",2009,7.8,162,237,2847.2,"Sci-Fi"
+"Jurassic Park",1993,8.2,127,63,914.7,"Adventure"
