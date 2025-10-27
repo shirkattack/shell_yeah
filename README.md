@@ -104,14 +104,20 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 pip install -r scripts/requirements.txt
 
 # 6. Copy the configuration files
-cp .zshrc ~/.zshrc
-cp p10k.zsh ~/.p10k.zsh
+cp sample_zsh.zsh ~/.zshrc
 
-# 7. Make scripts executable
+# 7. Install zsh plugins (required for the config)
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
+
+# 8. Make scripts executable
 chmod +x scripts/*
 
-# 8. Restart terminal
+# 9. Restart terminal and configure Powerlevel10k
 exec zsh
+# When prompted, run through the p10k configuration wizard:
+p10k configure
 ```
 
 ### 🍏 MacOS Setup
@@ -123,6 +129,55 @@ exec zsh
 brew install zsh curl git python3
 
 # 3. Follow the Linux steps from #3 onwards
+```
+
+## 🔧 Troubleshooting
+
+### Theme Not Loading
+If Powerlevel10k doesn't appear after installation:
+```bash
+# Run the configuration wizard
+p10k configure
+
+# Or check if the theme is properly installed
+ls ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+```
+
+### Plugins Not Working
+If you get "plugin not found" errors:
+```bash
+# Make sure all plugins are installed
+# For zsh-autosuggestions:
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+
+# For zsh-syntax-highlighting:
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+# For zsh-history-substring-search:
+git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
+```
+
+### Preview Command Not Working
+If the `preview` command fails:
+```bash
+# Ensure Python dependencies are installed
+pip install -r scripts/requirements.txt
+
+# Make sure Python 3.8+ is installed
+python3 --version
+
+# Check if the script path is correct
+ls ~/shell_yeah/scripts/data_preview.py
+```
+
+### Commands Like `lsd` Not Found
+Install missing system dependencies:
+```bash
+# Linux (Ubuntu/Debian)
+sudo apt-get install lsd curl git
+
+# macOS
+brew install lsd curl git
 ```
 
 ## 📚 Want to Go Even Deeper? Nerd Out Here 🤓

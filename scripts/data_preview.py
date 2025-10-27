@@ -22,7 +22,7 @@ def preview_data(file_path):
     
     if not file_path.exists():
         console.print(f"[red]Error:[/red] File {file_path} does not exist")
-        return
+        sys.exit(1)
     
     file_size = format_file_size(file_path.stat().st_size)
     
@@ -47,7 +47,7 @@ def preview_data(file_path):
             data_type = "JSON"
         else:
             console.print(f"[red]Error:[/red] Unsupported file type. Please use .csv or .json files.")
-            return
+            sys.exit(1)
         
         # File info panel
         info_table = Table.grid(padding=1)
@@ -90,6 +90,7 @@ def preview_data(file_path):
         console.print(f"[red]Error:[/red] Failed to process file: {str(e)}")
         import traceback
         console.print(traceback.format_exc())
+        sys.exit(1)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

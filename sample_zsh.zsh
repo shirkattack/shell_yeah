@@ -43,6 +43,7 @@ plugins=(
   jsontools
   zsh-autosuggestions
 	zsh-syntax-highlighting
+  history-substring-search
 )
 
 # Source oh-my-zsh
@@ -59,9 +60,9 @@ alias reload="source ~/.zshrc"
 
 # Directory shortcuts
 alias ..='cd ..'
-alias weather="curl wttr.in/"
-alias myip="curl https://api.ipify.org\?format\=json; echo"
-alias backup="sudo sh -c /usr/local/sbin/backup"
+alias weather="curl https://wttr.in/"
+alias myip="curl https://api.ipify.org?format=json; echo"
+# alias backup="sudo sh -c /usr/local/sbin/backup"  # DISABLED: Unsafe sudo usage. Create proper sudoers entry if needed.
 alias big="du -a -BM | sort -n -r | head -n 10"
 
 alias ...='cd ../..'
@@ -94,7 +95,7 @@ alias mem='free -h'
 alias df='df -h'
 
 # Data preview alias for CSV and JSON files
-alias preview="python3 $HOME/pimp_terminal/scripts/data_preview.py"
+alias preview="python3 $HOME/shell_yeah/scripts/data_preview.py"
 
 # Enhanced cd command
 setopt AUTO_CD
@@ -111,7 +112,7 @@ setopt SHARE_HISTORY
 
 # Auto-suggestions configuration
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=100
 ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 
