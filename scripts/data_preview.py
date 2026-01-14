@@ -3,12 +3,14 @@ import sys
 import json
 import pandas as pd
 from pathlib import Path
-import rich
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 
 console = Console()
+
+# Security: Maximum file size to prevent DoS attacks
+MAX_FILE_SIZE = 100 * 1024 * 1024  # 100MB
 
 def format_file_size(size_bytes):
     for unit in ['B', 'KB', 'MB', 'GB']:
@@ -18,13 +20,27 @@ def format_file_size(size_bytes):
     return f"{size_bytes:.2f} TB"
 
 def preview_data(file_path):
-    file_path = Path(file_path)
-    
+    # Security: Resolve to absolute path to prevent path traversal
+    file_path = Path(file_path).resolve()
+
+    # Security: Verify file exists
     if not file_path.exists():
-        console.print(f"[red]Error:[/red] File {file_path} does not exist")
+        console.print(f"[red]Error:[/red] File not found: {file_path}")
         sys.exit(1)
-    
-    file_size = format_file_size(file_path.stat().st_size)
+
+    # Security: Verify it's a regular file (not a directory, symlink, etc.)
+    if not file_path.is_file():
+        console.print(f"[red]Error:[/red] Not a regular file: {file_path}")
+        sys.exit(1)
+
+    # Security: Check file size to prevent loading huge files
+    file_size_bytes = file_path.stat().st_size
+    if file_size_bytes > MAX_FILE_SIZE:
+        console.print(f"[red]Error:[/red] File too large ({format_file_size(file_size_bytes)})")
+        console.print(f"Maximum allowed size is {format_file_size(MAX_FILE_SIZE)}")
+        sys.exit(1)
+
+    file_size = format_file_size(file_size_bytes)
     
     try:
         if file_path.suffix.lower() == '.csv':
@@ -72,11 +88,16 @@ def preview_data(file_path):
             sample_str = ", ".join(str(x) for x in sample_values)
             if len(sample_str) > 50:
                 sample_str = sample_str[:47] + "..."
-            
+
+            # Calculate percentage, handling empty dataframes
+            non_null_count = df[col].count()
+            total_rows = len(df)
+            percentage = (non_null_count / total_rows * 100) if total_rows > 0 else 0.0
+
             col_table.add_row(
                 str(col),
                 str(df[col].dtype),
-                f"{df[col].count()}/{len(df)} ({(df[col].count()/len(df)*100):.1f}%)",
+                f"{non_null_count}/{total_rows} ({percentage:.1f}%)",
                 sample_str
             )
         

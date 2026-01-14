@@ -24,6 +24,13 @@ Also, this project is all about **inspiration and fun**, not a one-size-fits-all
 - 🚦 **System monitoring that actually makes sense** (coming soon)
 - 💻 **Network tools for when your VPN is up to no good** (coming soon)
 
+## 🖥️ Platform Support
+
+✅ **Linux** (Ubuntu, Debian, Fedora, Arch, etc.)
+✅ **macOS** (Intel & Apple Silicon)
+
+All commands automatically adapt to your platform—no manual configuration needed!
+
 ## 🛠️ The Magic Under the Hood
 
 ### 1. Data Previews That Feel Like Cheating 🏄‍♂️
@@ -35,14 +42,17 @@ No more `head data.csv | less`. This command gives you:
 - Column types + missing value analysis
 - Sample values from each column
 - A sleek preview of the first five rows
+- **Security built-in**: File size limits (100MB max) and path validation to keep things safe
 
 ### 2. System Commands That Just Work 🦥
 ```bash
-myip        # What’s my IP again? Oh yeah…
-weather     # Look outside? Nah, I’ll ask my terminal.
-mem         # How much RAM do I have left?
-big         # What’s eating up my disk space?
+myip        # What's my IP again? Oh yeah…
+weather     # Look outside? Nah, I'll ask my terminal.
+mem         # How much RAM do I have left? (works on both Linux & macOS)
+ports       # See what's listening (platform-aware)
+big         # What's eating up my disk space?
 ```
+**Platform-smart**: Commands automatically adapt to Linux or macOS—no config needed!
 
 ### 3. Dev Shortcuts That Respect Your Time ⏳
 ```bash
@@ -83,13 +93,15 @@ Drop your scripts into `scripts/` to:
 - Create your own GPU monitoring tools
 - Add project-specific shortcuts
 
-## ⚗️ Installation – Let’s Get This Party Started 🕺🏽
+## ⚗️ Installation – Let's Get This Party Started 🕺🏽
+
+**Good news!** The setup auto-detects where you clone the repo—no hardcoded paths to fix. Clone it anywhere you like!
 
 ### 🐧 Linux Setup
 ```bash
-# 1. Clone the repo
-git clone https://github.com/yourusername/shell_yeah.git
-cd shell_yeah
+# 1. Clone the repo (anywhere you want!)
+git clone https://github.com/yourusername/shell_yeah.git ~/my-custom-location
+cd ~/my-custom-location
 
 # 2. Install dependencies
 sudo apt-get update && sudo apt-get install zsh curl git python3-pip
@@ -112,7 +124,7 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:
 git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
 
 # 8. Make scripts executable
-chmod +x scripts/*
+chmod +x scripts/*.py demo-script.sh
 
 # 9. Restart terminal and configure Powerlevel10k
 exec zsh
@@ -166,9 +178,11 @@ pip install -r scripts/requirements.txt
 # Make sure Python 3.8+ is installed
 python3 --version
 
-# Check if the script path is correct
-ls ~/shell_yeah/scripts/data_preview.py
+# The path is auto-detected, but verify the script exists
+ls scripts/data_preview.py
 ```
+
+**Note**: The preview command has a 100MB file size limit for security. If you need to preview larger files, you can adjust `MAX_FILE_SIZE` in `scripts/data_preview.py`.
 
 ### Commands Like `lsd` Not Found
 Install missing system dependencies:

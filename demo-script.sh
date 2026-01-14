@@ -13,11 +13,23 @@ readonly COLOR_PINK="13"
 check_dependencies() {
     local missing_deps=()
 
-    for cmd in curl lsd free df; do
+    # Universal commands
+    for cmd in curl lsd df; do
         if ! command -v "$cmd" &> /dev/null; then
             missing_deps+=("$cmd")
         fi
     done
+
+    # Platform-specific commands
+    if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        # Linux requires 'free' for memory info
+        if ! command -v free &> /dev/null; then
+            missing_deps+=("free")
+        fi
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS uses vm_stat for memory info (built-in, no check needed)
+        :
+    fi
 
     if [[ ${#missing_deps[@]} -gt 0 ]]; then
         echo "Error: Missing required commands: ${missing_deps[*]}"
@@ -81,7 +93,14 @@ demo_delay
 # Show system information
 print_color "$COLOR_BLUE" "\n💻 System Information:"
 echo "Memory Usage:"
-free -h
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    free -h
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS alternative - show memory statistics
+    vm_stat | perl -ne '/page size of (\d+)/ and $size=$1; /Pages\s+([^:]+)[^\d]+(\d+)/ and printf("%-16s % 16.2f Mi\n", "$1:", $2 * $size / 1048576);'
+else
+    echo "Memory information not available on this platform"
+fi
 demo_delay
 
 print_color "$COLOR_CYAN" "\n💾 Disk Usage:"

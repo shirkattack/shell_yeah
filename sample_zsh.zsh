@@ -7,6 +7,10 @@ fi
 # Path to oh-my-zsh installation
 export ZSH="$HOME/.oh-my-zsh"
 
+# Auto-detect Shell Yeah directory (works regardless of where repo is cloned)
+# ${(%):-%x} gets the path of this file, :A resolves to absolute path, :h gets directory
+SHELL_YEAH_DIR="${${(%):-%x}:A:h}"
+
 # Set theme to powerlevel10k
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
@@ -90,12 +94,27 @@ alias ll='ls -lah'
 alias la='ls -A'
 alias l='ls -CF'
 alias h='history'
-alias ports='netstat -tulanp'
-alias mem='free -h'
 alias df='df -h'
 
+# Platform-specific aliases
+# ports - show listening ports
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    alias ports='netstat -tulanp'
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: netstat doesn't support -tulanp flags
+    alias ports='netstat -an | grep LISTEN'
+fi
+
+# mem - show memory usage
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    alias mem='free -h'
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: use vm_stat for memory info
+    alias mem='vm_stat'
+fi
+
 # Data preview alias for CSV and JSON files
-alias preview="python3 $HOME/shell_yeah/scripts/data_preview.py"
+alias preview="python3 $SHELL_YEAH_DIR/scripts/data_preview.py"
 
 # Enhanced cd command
 setopt AUTO_CD
